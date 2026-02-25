@@ -7,8 +7,8 @@ import (
 
 	"github.com/rancher/dynamiclistener"
 	"github.com/rancher/dynamiclistener/cert"
-	"github.com/rancher/wrangler/v3/pkg/generated/controllers/core"
-	v1controller "github.com/rancher/wrangler/v3/pkg/generated/controllers/core/v1"
+	"github.com/rancher/wrangler/pkg/generated/controllers/core"
+	v1controller "github.com/rancher/wrangler/pkg/generated/controllers/core/v1"
 	"github.com/sirupsen/logrus"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
@@ -30,7 +30,7 @@ type storage struct {
 	storage         dynamiclistener.TLSStorage
 	secrets         v1controller.SecretController
 	tls             dynamiclistener.TLSFactory
-	queue           workqueue.TypedInterface[string]
+	queue           workqueue.DelayingInterface
 	queuedSecret    *v1.Secret
 }
 
@@ -39,7 +39,7 @@ func Load(ctx context.Context, secrets v1controller.SecretController, namespace,
 		name:      name,
 		namespace: namespace,
 		storage:   backing,
-		queue:     workqueue.NewTyped[string](),
+		queue:     workqueue.NewDelayingQueue(),
 	}
 	storage.runQueue()
 	storage.init(ctx, secrets)
@@ -51,7 +51,7 @@ func New(ctx context.Context, core CoreGetter, namespace, name string, backing d
 		name:      name,
 		namespace: namespace,
 		storage:   backing,
-		queue:     workqueue.NewTyped[string](),
+		queue:     workqueue.NewDelayingQueue(),
 	}
 	storage.runQueue()
 
