@@ -4,7 +4,7 @@ go 1.26.0
 
 require (
 	github.com/google/renameio/v2 v2.0.2
-	github.com/rancher/wrangler/v3 v3.3.5 // v0.34
+	github.com/rancher/wrangler v1.1.1-0.20230831050635-df1bd5aae9df // v2.0.1
 	github.com/sirupsen/logrus v1.9.4
 	github.com/stretchr/testify v1.11.1
 	golang.org/x/crypto v0.54.0
